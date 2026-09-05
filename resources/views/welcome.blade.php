@@ -91,7 +91,7 @@
         <!-- HERO SECTION -->
         <section class="relative bg-slate-900 text-white">
             <div class="h-48 sm:h-64 lg:h-80 w-full relative overflow-hidden">
-                <img src="{{ isset($profil) && $profil->foto_banner ? asset($profil->foto_banner) : asset('images/kantor-desa.png') }}" alt="Kantor Desa Lubuk Mandian Gajah" class="w-full h-full object-cover">
+                <img src="{{ isset($profil) && $profil->foto_banner ? asset($profil->foto_banner) : asset('images/kantor-desa.jpeg') }}" alt="Kantor Desa Lubuk Mandian Gajah" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent"></div>
             </div>
             
@@ -385,7 +385,7 @@
                         <div class="bg-slate-50/80 rounded-2xl border border-slate-200/90 overflow-hidden flex flex-col justify-between hover:shadow-lg hover:border-emerald-500/60 transition-all duration-300 group">
                             <div>
                                 <div class="relative h-48 bg-slate-800 overflow-hidden">
-                                    <img src="{{ $berita->gambar ? asset($berita->gambar) : asset('images/kantor-desa.png') }}" alt="{{ $berita->judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <img src="{{ $berita->gambar ? asset($berita->gambar) : asset('images/kantor-desa.jpeg') }}" alt="{{ $berita->judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     <div class="absolute top-3 left-3">
                                         <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider border shadow-sm backdrop-blur-sm bg-emerald-100 text-emerald-800 border-emerald-300">
                                             {{ $berita->kategori ?? 'Sosial & Budaya' }}

@@ -91,7 +91,7 @@
         <!-- HERO SECTION -->
         <section class="relative bg-slate-900 text-white">
             <div class="h-48 sm:h-64 lg:h-80 w-full relative overflow-hidden">
-                <img src="{{ isset($profil) && $profil->foto_banner ? asset($profil->foto_banner) : asset('images/kantor-desa.jpeg') }}" alt="Kantor Desa Lubuk Mandian Gajah" class="w-full h-full object-cover">
+                <img src="{{ asset('images/kantor-desa.jpeg') }}" alt="Kantor Desa Lubuk Mandian Gajah" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent"></div>
             </div>
             
@@ -351,7 +351,7 @@
                             <div x-show="openAccordion === 'sejarah'" x-collapse x-cloak class="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 border-t border-slate-100">
                                 <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center mb-3">
                                     <div class="sm:col-span-5 rounded-xl overflow-hidden border border-slate-200 shadow-sm">
-                                        <img src="{{ asset('images/rumah-adat-melayu.png') }}" alt="Rumah Adat Balai Melayu" class="w-full h-36 object-cover">
+                                        <img src="{{ asset('images/kantor-desa.jpeg') }}" alt="Kantor Desa Lubuk Mandian Gajah" class="w-full h-36 object-cover">
                                     </div>
                                     <div class="sm:col-span-7">
                                         <p class="leading-relaxed text-justify">

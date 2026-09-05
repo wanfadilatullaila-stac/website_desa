@@ -578,10 +578,22 @@
                     <div x-show="kontenTab === 'berita'" x-data="{ editBeritaModal: false, editBerita: {} }" class="pt-2 space-y-6" x-transition:enter="transition ease-out duration-150">
                         <!-- FORM TAMBAH BERITA -->
                         <div class="bg-slate-50/80 rounded-2xl p-6 border border-slate-200/80">
-                            <h4 class="font-extrabold text-slate-900 text-base mb-4 flex items-center space-x-2">
-                                <span class="w-3 h-3 rounded-full bg-[#235832]"></span>
-                                <span>Form Input & Publish Berita Desa</span>
-                            </h4>
+                            @if ($errors->any())
+                                <div class="mb-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-xl font-bold text-xs space-y-1">
+                                    <div class="font-extrabold">Terjadi Kesalahan Input:</div>
+                                    <ul class="list-disc pl-4 font-medium">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            @if (session('success'))
+                                <div class="mb-4 p-3 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-xl font-bold text-xs">
+                                    ✓ {{ session('success') }}
+                                </div>
+                            @endif
 
                             <form action="{{ route('admin.store-berita') }}" method="POST" enctype="multipart/form-data" class="space-y-4 text-xs">
                                 @csrf
@@ -620,8 +632,13 @@
                                 </div>
 
                                 <div>
-                                    <label class="block font-bold text-slate-700 mb-1">Deskripsi / Isi Berita Desa <span class="text-red-500">*</span></label>
-                                    <textarea name="isi" required rows="4" placeholder="Tulis isi berita lengkap di sini..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 font-medium"></textarea>
+                                    <label class="block font-bold text-slate-700 mb-1">Ringkasan Singkat Berita (Cuplikan Depan)</label>
+                                    <textarea name="ringkasan" rows="2" placeholder="Tulis ringkasan/cuplikan pendek berita yang akan tampil di kartu halaman depan..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 font-medium"></textarea>
+                                </div>
+
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Isi Berita Lengkap (Detail Artikel) <span class="text-red-500">*</span></label>
+                                    <textarea name="isi" required rows="5" placeholder="Tulis isi berita lengkap di sini..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 font-medium"></textarea>
                                 </div>
 
                                 <div class="pt-2">
@@ -665,7 +682,7 @@
                                                 </td>
                                                 <td class="p-3 font-bold text-slate-900 max-w-xs truncate">
                                                     {{ $item->judul }}
-                                                    <span class="block text-[10px] font-normal text-slate-400 truncate">{{ Str::limit($item->isi_berita, 50) }}</span>
+                                                    <span class="block text-[10px] font-normal text-slate-400 truncate">{{ $item->ringkasan ?: Str::limit($item->isi_berita, 50) }}</span>
                                                 </td>
                                                 <td class="p-3">
                                                     <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-[#235832] border border-emerald-200">
@@ -678,7 +695,7 @@
                                                 </td>
                                                 <td class="p-3 text-center">
                                                     <div class="flex items-center justify-center space-x-2">
-                                                        <button @click="editBeritaModal = true; editBerita = { id: {{ $item->id }}, judul: '{{ addslashes($item->judul) }}', kategori: '{{ addslashes($item->kategori) }}', isi: '{{ addslashes(str_replace(["\r", "\n"], ' ', $item->isi_berita)) }}', penulis: '{{ addslashes($item->penulis) }}', tanggal: '{{ $item->tanggal_publikasi }}' }" class="p-2 text-blue-600 hover:bg-blue-50 rounded-xl transition-all font-bold" title="Edit Berita">
+                                                        <button @click="editBeritaModal = true; editBerita = Object.assign({}, @js($item)); editBerita.ringkasan = editBerita.ringkasan || ''; editBerita.isi = editBerita.isi_berita; editBerita.tanggal = editBerita.tanggal_publikasi;" class="p-2 text-blue-600 hover:bg-blue-50 rounded-xl transition-all font-bold" title="Edit Berita">
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                             </svg>
@@ -721,7 +738,7 @@
                                         <label class="block font-bold text-slate-700 mb-1">Judul Berita</label>
                                         <input type="text" name="judul" x-model="editBerita.judul" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-slate-800 font-medium">
                                     </div>
-                                    <div class="grid grid-cols-2 gap-3">
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                         <div>
                                             <label class="block font-bold text-slate-700 mb-1">Kategori</label>
                                             <select name="kategori" x-model="editBerita.kategori" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-slate-800 font-medium">
@@ -729,7 +746,12 @@
                                                 <option value="Pembangunan">Pembangunan Desa</option>
                                                 <option value="Kesehatan">Kesehatan & Posyandu</option>
                                                 <option value="Kegiatan">Kegiatan Masyarakat</option>
+                                                <option value="Sosial & Budaya">Sosial & Budaya</option>
                                             </select>
+                                        </div>
+                                        <div>
+                                            <label class="block font-bold text-slate-700 mb-1">Penulis</label>
+                                            <input type="text" name="penulis" x-model="editBerita.penulis" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-slate-800 font-medium">
                                         </div>
                                         <div>
                                             <label class="block font-bold text-slate-700 mb-1">Tanggal Publikasi</label>
@@ -738,11 +760,21 @@
                                     </div>
                                     <div>
                                         <label class="block font-bold text-slate-700 mb-1">Ganti Gambar (Opsional)</label>
+                                        <template x-if="editBerita.gambar">
+                                            <div class="mb-2 flex items-center space-x-2">
+                                                <img :src="'/' + editBerita.gambar" class="w-12 h-12 object-cover rounded-lg border">
+                                                <span class="text-[10px] text-slate-400">Gambar saat ini</span>
+                                            </div>
+                                        </template>
                                         <input type="file" name="gambar" class="w-full text-xs text-slate-500 file:py-1 file:px-3 file:rounded-xl file:border-0 file:bg-emerald-100 file:text-[#235832] file:font-bold">
                                     </div>
                                     <div>
-                                        <label class="block font-bold text-slate-700 mb-1">Isi Berita</label>
-                                        <textarea name="isi" x-model="editBerita.isi" rows="4" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-slate-800 font-medium"></textarea>
+                                        <label class="block font-bold text-slate-700 mb-1">Ringkasan Singkat Berita (Cuplikan Depan)</label>
+                                        <textarea name="ringkasan" x-model="editBerita.ringkasan" rows="2" placeholder="Cuplikan pendek di halaman depan..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-slate-800 font-medium"></textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1">Isi Berita Lengkap (Detail Artikel) <span class="text-red-500">*</span></label>
+                                        <textarea name="isi" x-model="editBerita.isi" rows="6" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-slate-800 font-medium"></textarea>
                                     </div>
                                     <div class="pt-2 flex justify-end space-x-2">
                                         <button type="button" @click="editBeritaModal = false" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl">Batal</button>

@@ -49,10 +49,10 @@ Route::get('/struktur', function () {
     return view('struktur', compact('aparaturs'));
 });
 
-Route::get('/berita', function () {
-    $beritas = BeritaDesa::latest()->get();
-    return view('berita', compact('beritas'));
-})->name('berita');
+use App\Http\Controllers\BeritaController;
+
+Route::get('/berita', [BeritaController::class, 'index'])->name('berita');
+Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('berita.detail');
 
 Route::get('/dashboard', [AdminDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 

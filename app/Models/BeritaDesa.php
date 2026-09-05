@@ -13,6 +13,7 @@ class BeritaDesa extends Model
         'judul',
         'slug',
         'kategori',
+        'ringkasan',
         'isi_berita',
         'gambar',
         'penulis',

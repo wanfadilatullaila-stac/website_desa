@@ -165,18 +165,15 @@
                                 </h3>
 
                                 <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium line-clamp-3 sm:line-clamp-4">
-                                    {{ Str::limit(strip_tags($featured->isi_berita), 220) }}
+                                    {{ $featured->ringkasan ?: Str::limit(strip_tags($featured->isi_berita), 220) }}
                                 </p>
                             </div>
 
                             <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
                                 <span class="text-xs font-medium text-slate-400">Est. 3 mnt baca</span>
-                                <button class="inline-flex items-center space-x-2 text-xs font-extrabold text-white bg-[#235832] hover:bg-[#1b4527] px-4 py-2.5 rounded-xl shadow-md transition-all">
-                                    <span>Baca Selengkapnya</span>
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                                    </svg>
-                                </button>
+                                <a href="{{ route('berita.detail', $featured->id) }}" class="inline-flex items-center space-x-2 text-xs font-extrabold text-white bg-[#235832] hover:bg-[#1b4527] px-4 py-2.5 rounded-xl shadow-md transition-all">
+                                    <span>Baca Selengkapnya &rarr;</span>
+                                </a>
                             </div>
                         </div>
 
@@ -222,19 +219,19 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @forelse ($beritas ?? [] as $item)
                         <div 
-                            x-show="shouldShow('{{ strtolower($item->kategori) }}', '{{ addslashes($item->judul) }}', '{{ addslashes(Str::limit(strip_tags($item->isi_berita), 120)) }}')" 
+                            x-show="shouldShow('{{ strtolower($item->kategori) }}', '{{ addslashes($item->judul) }}', '{{ addslashes($item->ringkasan ?: Str::limit(strip_tags($item->isi_berita), 120)) }}')" 
                             class="bg-white rounded-2xl border border-slate-200/90 shadow-md overflow-hidden flex flex-col justify-between hover:shadow-xl hover:border-emerald-500/60 transition-all duration-300 group"
                         >
                             <div>
                                 <!-- Image Thumbnail -->
-                                <div class="relative h-48 bg-slate-800 overflow-hidden">
+                                <a href="{{ route('berita.detail', $item->id) }}" class="block relative h-48 bg-slate-800 overflow-hidden">
                                     <img src="{{ $item->gambar ? asset($item->gambar) : asset('images/kantor-desa.png') }}" alt="{{ $item->judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     <div class="absolute top-3 left-3">
                                         <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider border shadow-sm backdrop-blur-sm bg-emerald-100 text-emerald-800 border-emerald-300">
                                             {{ $item->kategori ?? 'Umum' }}
                                         </span>
                                     </div>
-                                </div>
+                                </a>
 
                                 <!-- Card Content Body -->
                                 <div class="p-5 space-y-2.5">
@@ -246,23 +243,22 @@
                                     </div>
 
                                     <h4 class="text-base font-extrabold text-slate-800 group-hover:text-[#235832] transition-colors leading-snug line-clamp-2">
-                                        {{ $item->judul }}
+                                        <a href="{{ route('berita.detail', $item->id) }}" class="hover:underline">
+                                            {{ $item->judul }}
+                                        </a>
                                     </h4>
 
                                     <p class="text-xs text-slate-600 leading-relaxed font-medium line-clamp-3">
-                                        {{ Str::limit(strip_tags($item->isi_berita), 130) }}
+                                        {{ $item->ringkasan ?: Str::limit(strip_tags($item->isi_berita), 130) }}
                                     </p>
                                 </div>
                             </div>
 
                             <!-- Card Footer Action -->
                             <div class="p-5 pt-0">
-                                <button class="w-full inline-flex items-center justify-center space-x-2 text-xs font-bold text-[#235832] bg-emerald-50 hover:bg-[#235832] hover:text-white border border-emerald-200/80 py-2.5 px-4 rounded-xl transition-all shadow-sm">
-                                    <span>Baca Berita</span>
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
-                                    </svg>
-                                </button>
+                                <a href="{{ route('berita.detail', $item->id) }}" class="w-full inline-flex items-center justify-center space-x-2 text-xs font-bold text-[#235832] bg-emerald-50 hover:bg-[#235832] hover:text-white border border-emerald-200/80 py-2.5 px-4 rounded-xl transition-all shadow-sm">
+                                    <span>Baca Berita &rarr;</span>
+                                </a>
                             </div>
 
                         </div>
@@ -272,6 +268,12 @@
                         </div>
                     @endforelse
                 </div>
+
+                @if(method_exists($beritas, 'links'))
+                    <div class="pt-6 flex justify-center">
+                        {{ $beritas->links() }}
+                    </div>
+                @endif
 
             </section>
 

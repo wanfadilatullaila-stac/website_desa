@@ -400,19 +400,18 @@
                                         <span>{{ \Carbon\Carbon::parse($berita->tanggal_publikasi ?? $berita->created_at)->isoFormat('D MMMM Y') }}</span>
                                     </div>
                                     <h4 class="text-base font-extrabold text-slate-900 group-hover:text-[#235832] transition-colors leading-snug line-clamp-2">
-                                        {{ $berita->judul }}
+                                        <a href="{{ route('berita.detail', $berita->id) }}" class="hover:underline">
+                                            {{ $berita->judul }}
+                                        </a>
                                     </h4>
                                     <p class="text-xs text-slate-600 leading-relaxed font-medium line-clamp-3">
-                                        {{ Str::limit(strip_tags($berita->isi_berita), 130) }}
+                                        {{ $berita->ringkasan ?: Str::limit(strip_tags($berita->isi_berita), 130) }}
                                     </p>
                                 </div>
                             </div>
                             <div class="p-5 pt-0">
-                                <a href="{{ url('/berita') }}" class="w-full inline-flex items-center justify-center space-x-2 text-xs font-bold text-[#235832] bg-white hover:bg-[#235832] hover:text-white border border-slate-200 py-2 px-4 rounded-xl transition-all shadow-xs">
-                                    <span>Baca Berita</span>
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
-                                    </svg>
+                                <a href="{{ route('berita.detail', $berita->id) }}" class="w-full inline-flex items-center justify-center space-x-2 text-xs font-bold text-[#235832] bg-white hover:bg-[#235832] hover:text-white border border-slate-200 py-2 px-4 rounded-xl transition-all shadow-xs">
+                                    <span>Baca Berita &rarr;</span>
                                 </a>
                             </div>
                         </div>

@@ -103,8 +103,11 @@ class AdminDashboardController extends Controller
     {
         $request->validate([
             'judul' => 'required|string|max:255',
-            'kategori' => 'required|string',
-            'isi' => 'required|string',
+            'kategori' => 'nullable|string',
+            'ringkasan' => 'nullable|string',
+            'isi' => 'nullable|string',
+            'isi_berita' => 'nullable|string',
+            'konten' => 'nullable|string',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'penulis' => 'nullable|string',
             'tanggal_publikasi' => 'nullable|date',
@@ -112,17 +115,27 @@ class AdminDashboardController extends Controller
 
         $gambarPath = null;
         if ($request->hasFile('gambar')) {
+            if (!File::exists(public_path('uploads/berita'))) {
+                File::makeDirectory(public_path('uploads/berita'), 0755, true);
+            }
             $file = $request->file('gambar');
             $filename = 'berita_' . time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/berita'), $filename);
             $gambarPath = 'uploads/berita/' . $filename;
         }
 
+        $isiText = $request->isi ?? $request->isi_berita ?? $request->konten ?? '';
+
+        $ringkasan = $request->filled('ringkasan') 
+            ? $request->ringkasan 
+            : Str::limit(strip_tags($isiText), 160);
+
         BeritaDesa::create([
             'judul' => $request->judul,
             'slug' => Str::slug($request->judul) . '-' . time(),
-            'kategori' => $request->kategori,
-            'isi_berita' => $request->isi,
+            'kategori' => $request->kategori ?? 'Kegiatan',
+            'ringkasan' => $ringkasan,
+            'isi_berita' => $isiText,
             'gambar' => $gambarPath,
             'penulis' => $request->penulis ?? 'Admin Desa',
             'tanggal_publikasi' => $request->tanggal_publikasi ?? now(),
@@ -140,8 +153,11 @@ class AdminDashboardController extends Controller
 
         $request->validate([
             'judul' => 'required|string|max:255',
-            'kategori' => 'required|string',
-            'isi' => 'required|string',
+            'kategori' => 'nullable|string',
+            'ringkasan' => 'nullable|string',
+            'isi' => 'nullable|string',
+            'isi_berita' => 'nullable|string',
+            'konten' => 'nullable|string',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'penulis' => 'nullable|string',
             'tanggal_publikasi' => 'nullable|date',
@@ -151,16 +167,28 @@ class AdminDashboardController extends Controller
             if ($berita->gambar && File::exists(public_path($berita->gambar))) {
                 File::delete(public_path($berita->gambar));
             }
+            if (!File::exists(public_path('uploads/berita'))) {
+                File::makeDirectory(public_path('uploads/berita'), 0755, true);
+            }
             $file = $request->file('gambar');
             $filename = 'berita_' . time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/berita'), $filename);
             $berita->gambar = 'uploads/berita/' . $filename;
         }
 
+        $isiText = $request->isi ?? $request->isi_berita ?? $request->konten ?? $berita->isi_berita;
+
         $berita->judul = $request->judul;
-        $berita->slug = Str::slug($request->judul) . '-' . time();
-        $berita->kategori = $request->kategori;
-        $berita->isi_berita = $request->isi;
+        if ($berita->isDirty('judul') || empty($berita->slug)) {
+            $berita->slug = Str::slug($request->judul) . '-' . $berita->id;
+        }
+        if ($request->filled('kategori')) {
+            $berita->kategori = $request->kategori;
+        }
+        $berita->ringkasan = $request->filled('ringkasan') 
+            ? $request->ringkasan 
+            : Str::limit(strip_tags($isiText), 160);
+        $berita->isi_berita = $isiText;
         if ($request->filled('penulis')) {
             $berita->penulis = $request->penulis;
         }

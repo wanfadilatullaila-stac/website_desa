@@ -12,7 +12,7 @@
     <style>
         @page {
             size: 215mm 330mm portrait;
-            margin: 8mm 12mm;
+            margin: 6mm 10mm;
         }
 
         .print-container {
@@ -25,10 +25,15 @@
         }
 
         @media print {
+            html, body {
+                height: 100% !important;
+                overflow: hidden !important;
+            }
             body {
                 background-color: #ffffff !important;
                 padding: 0 !important;
                 color: black !important;
+                font-size: 9px !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -113,7 +118,7 @@
     </div>
 
     <!-- DOCUMENT CONTAINER A4 SIZE SIMULATION -->
-    <div class="print-container space-y-1.5 text-[9.5px] leading-tight" style="max-width: 215mm; width: 100%; margin: 0 auto; background: #ffffff; padding: 15mm; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); box-sizing: border-box;">
+    <div class="print-container space-y-1 text-[9px] leading-tight" style="max-width: 215mm; width: 100%; margin: 0 auto; background: #ffffff; padding: 10mm; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); box-sizing: border-box;">
         
         <!-- HEADER KOP DISDUKCAPIL & WILAYAH -->
         <div class="flex justify-between items-start border-b-2 border-black pb-2">
@@ -168,8 +173,8 @@
         </div>
 
         <!-- SEKSI 1: DATA DAERAH ASAL -->
-        <div class="border border-black p-2 space-y-1.5">
-            <div class="font-extrabold uppercase bg-slate-100 px-2 py-0.5 border-b border-black text-[10px]">
+        <div class="border border-black p-1 space-y-1">
+            <div class="font-extrabold uppercase bg-slate-100 px-1.5 py-0.5 border-b border-black text-[9.5px]">
                 DATA DAERAH ASAL
             </div>
 
@@ -321,8 +326,8 @@
         </div>
 
         <!-- SEKSI 2: DATA KEPINDAHAN -->
-        <div class="border border-black p-2 space-y-1.5">
-            <div class="font-extrabold uppercase bg-slate-100 px-2 py-0.5 border-b border-black text-[10px]">
+        <div class="border border-black p-1 space-y-1">
+            <div class="font-extrabold uppercase bg-slate-100 px-1.5 py-0.5 border-b border-black text-[9.5px]">
                 DATA KEPINDAHAN
             </div>
 
@@ -488,19 +493,19 @@
         </div>
 
         <!-- SEKSI 3: KELUARGA YANG PINDAH (TABEL PETAK CHARACTER DISDUKCAPIL) -->
-        <div class="border border-black p-2 space-y-1">
-            <div class="font-extrabold uppercase bg-slate-100 px-2 py-0.5 border-b border-black text-[10px]">
+        <div class="border border-black p-1 space-y-0.5">
+            <div class="font-extrabold uppercase bg-slate-100 px-1.5 py-0.5 border-b border-black text-[9.5px]">
                 6. KELUARGA YANG PINDAH
             </div>
 
             <table class="w-full text-left border-collapse border border-black text-[9.5px]">
                 <thead>
                     <tr class="bg-slate-100 text-center font-black border-b border-black">
-                        <th class="border border-black py-1 px-1 w-7">NO.</th>
-                        <th class="border border-black py-1 px-1">NIK (16 KOTAK PETAK)</th>
-                        <th class="border border-black py-1 px-1 w-44">NAMA</th>
-                        <th class="border border-black py-1 px-1 w-24">MASA BERLAKU KTP S/D</th>
-                        <th class="border border-black py-1 px-1 w-20">SHDK</th>
+                        <th class="border border-black py-0.5 px-1 w-7">NO.</th>
+                        <th class="border border-black py-0.5 px-1">NIK (16 KOTAK PETAK)</th>
+                        <th class="border border-black py-0.5 px-1 w-44">NAMA</th>
+                        <th class="border border-black py-0.5 px-1 w-24">MASA BERLAKU KTP S/D</th>
+                        <th class="border border-black py-0.5 px-1 w-20">SHDK</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -516,21 +521,21 @@
                             $nikChars = str_split(str_pad($nikRaw, 16, ' '));
                         @endphp
                         <tr class="border-b border-black">
-                            <td class="border border-black py-1 px-1 text-center font-bold">{{ $i + 1 }}</td>
-                            <td class="border border-black py-1 px-1 text-center">
+                            <td class="border border-black py-0.5 px-1 text-center font-bold">{{ $i + 1 }}</td>
+                            <td class="border border-black py-0.5 px-1 text-center">
                                 <div class="flex items-center justify-center">
                                     @foreach($nikChars as $digit)
                                         <span class="digit-box">{{ trim($digit) }}</span>
                                     @endforeach
                                 </div>
                             </td>
-                            <td class="border border-black py-1 px-1 uppercase font-bold text-[9px]">
+                            <td class="border border-black py-0.5 px-1 uppercase font-bold text-[9px]">
                                 {{ $row['nama'] ?? '' }}
                             </td>
-                            <td class="border border-black py-1 px-1 text-center font-semibold text-[9px]">
+                            <td class="border border-black py-0.5 px-1 text-center font-semibold text-[9px]">
                                 {{ $row['masa_berlaku_ktp'] ?? '' }}
                             </td>
-                            <td class="border border-black py-1 px-1 text-center uppercase font-bold text-[9px]">
+                            <td class="border border-black py-0.5 px-1 text-center uppercase font-bold text-[9px]">
                                 {{ $row['shdk'] ?? '' }}
                             </td>
                         </tr>

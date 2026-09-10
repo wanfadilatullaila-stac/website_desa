@@ -121,3 +121,10 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/buat-link-storage', function () {
+    Artisan::call('storage:link');
+    return 'Sukses! Symlink storage berhasil dibuat.';
+});

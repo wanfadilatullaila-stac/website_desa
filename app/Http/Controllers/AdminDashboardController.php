@@ -11,6 +11,9 @@ use App\Models\StatistikDesa;
 use App\Models\SuratPindah;
 use App\Models\SuratPindahF125;
 use App\Models\SuratPindahF129;
+use App\Models\SuratPindahF134;
+use App\Models\BiodataKeluargaF101;
+use App\Models\SuratKelahiranF201;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -25,17 +28,94 @@ class AdminDashboardController extends Controller
     public function index()
     {
         $totalSurat = 0;
+        $riwayatSurat = collect();
+
         try {
-            $totalSurat += SuratPindahF125::count();
+            if (Schema::hasTable('surat_pindah_f125s')) {
+                $f125 = SuratPindahF125::latest()->get();
+                $totalSurat += $f125->count();
+                foreach($f125 as $s) {
+                    $riwayatSurat->push([
+                        'nomor' => $s->nomor_surat ?? '-',
+                        'nama' => $s->nama_pemohon ?? $s->nama_kepala_keluarga ?? '-',
+                        'jenis' => 'Permohonan Pindah F-1.25',
+                        'tanggal' => $s->created_at->format('d M Y'),
+                        'created_at' => $s->created_at,
+                        'print_url' => route('surat.f125.print', $s->id)
+                    ]);
+                }
+            }
         } catch (\Throwable $e) {}
 
         try {
-            $totalSurat += SuratPindahF129::count();
+            if (Schema::hasTable('surat_pindah_f129s')) {
+                $f129 = SuratPindahF129::latest()->get();
+                $totalSurat += $f129->count();
+                foreach($f129 as $s) {
+                    $riwayatSurat->push([
+                        'nomor' => $s->nomor_surat ?? '-',
+                        'nama' => $s->nama_pemohon ?? $s->nama_kepala_keluarga ?? '-',
+                        'jenis' => 'Permohonan Pindah F-1.29',
+                        'tanggal' => $s->created_at->format('d M Y'),
+                        'created_at' => $s->created_at,
+                        'print_url' => route('surat.f129.print', $s->id)
+                    ]);
+                }
+            }
         } catch (\Throwable $e) {}
 
         try {
-            $totalSurat += SuratPindah::count();
+            if (Schema::hasTable('surat_pindah_f134s')) {
+                $f134 = SuratPindahF134::latest()->get();
+                $totalSurat += $f134->count();
+                foreach($f134 as $s) {
+                    $riwayatSurat->push([
+                        'nomor' => $s->nomor_surat ?? '-',
+                        'nama' => $s->nama_pemohon ?? $s->nama_kepala_keluarga ?? '-',
+                        'jenis' => 'Permohonan Pindah F-1.34',
+                        'tanggal' => $s->created_at->format('d M Y'),
+                        'created_at' => $s->created_at,
+                        'print_url' => route('surat.f134.print', $s->id)
+                    ]);
+                }
+            }
         } catch (\Throwable $e) {}
+
+        try {
+            if (Schema::hasTable('surat_kelahiran_f201s')) {
+                $f201 = SuratKelahiranF201::latest()->get();
+                $totalSurat += $f201->count();
+                foreach($f201 as $s) {
+                    $riwayatSurat->push([
+                        'nomor' => $s->nomor_surat ?? '-',
+                        'nama' => $s->nama_pelapor ?? $s->nama_kepala_keluarga ?? '-',
+                        'jenis' => 'Kelahiran F-2.01',
+                        'tanggal' => $s->created_at->format('d M Y'),
+                        'created_at' => $s->created_at,
+                        'print_url' => route('surat.f201.print', $s->id)
+                    ]);
+                }
+            }
+        } catch (\Throwable $e) {}
+
+        try {
+            if (Schema::hasTable('biodata_keluarga_f101s')) {
+                $f101 = BiodataKeluargaF101::latest()->get();
+                $totalSurat += $f101->count();
+                foreach($f101 as $s) {
+                    $riwayatSurat->push([
+                        'nomor' => $s->nomor_surat ?? '-',
+                        'nama' => $s->nama_kepala_keluarga ?? '-',
+                        'jenis' => 'Biodata Penduduk F-1.01',
+                        'tanggal' => $s->created_at->format('d M Y'),
+                        'created_at' => $s->created_at,
+                        'print_url' => route('surat.f101.print', $s->id)
+                    ]);
+                }
+            }
+        } catch (\Throwable $e) {}
+
+        $riwayatSurat = $riwayatSurat->sortByDesc('created_at')->values()->all();
 
         $arsipDokumens = collect();
         try {
@@ -53,6 +133,7 @@ class AdminDashboardController extends Controller
 
         return view('dashboard', compact(
             'totalSurat',
+            'riwayatSurat',
             'totalBerkas',
             'arsipDokumens',
             'profil',

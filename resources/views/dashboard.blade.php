@@ -458,6 +458,11 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-100 font-medium text-slate-800">
+                                    <template x-if="riwayatSurat.length === 0">
+                                        <tr>
+                                            <td colspan="5" class="py-8 text-center text-slate-500 italic">Belum ada riwayat surat yang dibuat.</td>
+                                        </tr>
+                                    </template>
                                     <template x-for="(item, index) in riwayatSurat" :key="index">
                                         <tr class="hover:bg-slate-50/80 transition-colors">
                                             <td class="py-3 px-4 font-mono font-bold text-[#235832]" x-text="item.nomor"></td>
@@ -467,12 +472,12 @@
                                             </td>
                                             <td class="py-3 px-4 text-slate-500" x-text="item.tanggal"></td>
                                             <td class="py-3 px-4 text-center">
-                                                <button @click="reprintSurat(item)" class="px-3 py-1 bg-[#235832] hover:bg-[#1b4527] text-white text-[11px] font-bold rounded-lg transition-all shadow-xs inline-flex items-center space-x-1">
+                                                <a :href="item.print_url" target="_blank" class="px-3 py-1 bg-[#235832] hover:bg-[#1b4527] text-white text-[11px] font-bold rounded-lg transition-all shadow-xs inline-flex items-center space-x-1">
                                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
                                                     </svg>
                                                     <span>Cetak Ulang</span>
-                                                </button>
+                                                </a>
                                             </td>
                                         </tr>
                                     </template>
@@ -1551,11 +1556,7 @@
                     jumlahPengikut: '',
                     keperluan: ''
                 },
-                riwayatSurat: [
-                    { nomor: '470/LMG-SKP/VIII/2026', nama: 'Budi Santoso', jenis: 'Surat Pindah Domisili', tanggal: '28 Aug 2026', nik: '1405021203890002', tempatLahir: 'Bunut', tglLahir: '1989-03-12', jenisKelamin: 'Laki-laki', agama: 'Islam', pekerjaan: 'Petani', alamat: 'Dusun I RT 01 RW 01', alamatTujuan: 'Kec. Pangkalan Kerinci', jumlahPengikut: '2 Orang', keperluan: 'Kepindahan domisili keluarga' },
-                    { nomor: '470/LMG-KK/VIII/2026', nama: 'Siti Aminah', jenis: 'Pindah Kartu Keluarga', tanggal: '25 Aug 2026', nik: '1405024508920001', tempatLahir: 'Pelalawan', tglLahir: '1992-08-15', jenisKelamin: 'Perempuan', agama: 'Islam', pekerjaan: 'Wiraswasta', alamat: 'Dusun II RT 03 RW 02', alamatTujuan: 'Dusun I RT 02 RW 01', jumlahPengikut: '1 Orang', keperluan: 'Pecah Kartu Keluarga Mandiri' },
-                    { nomor: '474/LMG-AKTA/VIII/2026', nama: 'Ahmad Dahlan', jenis: 'Permohonan Akta', tanggal: '22 Aug 2026', nik: '1405021105780003', tempatLahir: 'Bunut', tglLahir: '1978-05-11', jenisKelamin: 'Laki-laki', agama: 'Islam', pekerjaan: 'Buruh Harian', alamat: 'Dusun III RT 05 RW 03', keperluan: 'Penerbitan Akta Kelahiran Anak Ketiga' }
-                ],
+                riwayatSurat: @json($riwayatSurat ?? []),
                 openFormModal(type, title, code, description) {
                     this.selectedSurat = { type, title, code, description };
                     this.form = {

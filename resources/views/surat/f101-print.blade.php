@@ -6,8 +6,8 @@
     <title>Cetak Formulir Biodata WNI F-1.01 - {{ $surat->nama_kepala_keluarga }}</title>
     <style>
         @page {
-            size: A4 landscape;
-            margin: 6mm 8mm;
+            size: 215mm 330mm portrait;
+            margin: 4mm 6mm;
         }
 
         * {
@@ -38,12 +38,21 @@
             body {
                 background-color: #fff;
                 padding: 0;
+                font-size: 8px !important;
+                line-height: 1.1 !important;
             }
             .print-container {
                 box-shadow: none;
                 width: 100%;
-                padding: 0;
-                margin: 0;
+                transform: scale(0.86);
+                transform-origin: top center;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            table td, table th {
+                padding-top: 1px !important;
+                padding-bottom: 1px !important;
+                font-size: 8px !important;
             }
             .no-print {
                 display: none !important;
@@ -54,7 +63,7 @@
         .header-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .header-logo {
             width: 45px;
@@ -97,7 +106,7 @@
         .info-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 6px;
+            margin-bottom: 2px;
             font-size: 8pt;
         }
         .info-table td {
@@ -132,8 +141,8 @@
         .section-title {
             font-weight: bold;
             font-size: 8.5pt;
-            margin-top: 4px;
-            margin-bottom: 2px;
+            margin-top: 2px;
+            margin-bottom: 1px;
             text-transform: uppercase;
             background: #e5e7eb;
             padding: 2px 5px;
@@ -143,7 +152,7 @@
         .matrix-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 6px;
+            margin-bottom: 2px;
             font-size: 7.5pt;
             table-layout: fixed;
         }
@@ -179,7 +188,7 @@
         .ttd-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 6px;
+            margin-top: 2px;
             font-size: 8pt;
             text-align: center;
         }
@@ -190,7 +199,7 @@
         }
 
         .ttd-space {
-            height: 38px;
+            height: 25px;
         }
 
         .ttd-name {

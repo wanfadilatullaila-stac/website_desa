@@ -11,8 +11,8 @@
     @endif
     <style>
         @page {
-            size: A4 portrait;
-            margin: 6mm 8mm 6mm 8mm;
+            size: 215mm 330mm portrait;
+            margin: 8mm 12mm;
         }
 
         .print-container {
@@ -26,15 +26,21 @@
 
         @media print {
             body {
-                background: white !important;
+                background-color: #ffffff !important;
+                padding: 0 !important;
                 color: black !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
-            .no-print {
+            .no-print, .btn-print, button, .alert {
                 display: none !important;
             }
             .print-container {
+                max-width: 100% !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
                 max-height: 285mm !important;
                 overflow: hidden !important;
                 page-break-after: avoid !important;
@@ -85,7 +91,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-900 font-sans text-xs min-h-screen py-4 print:py-0">
+<body class="text-slate-900 font-sans text-xs" style="background-color: #f3f4f6; min-height: 100vh; padding: 20px 0;">
 
     <!-- FLOATING ACTION BUTTON BAR (NO-PRINT) PRESISI FIGMA -->
     <div class="no-print fixed top-4 right-4 z-50 flex items-center space-x-3 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-2xl border border-slate-300">
@@ -107,7 +113,7 @@
     </div>
 
     <!-- DOCUMENT CONTAINER A4 SIZE SIMULATION -->
-    <div class="print-container max-w-[210mm] mx-auto bg-white p-3 sm:p-5 print:p-0 shadow-xl print:shadow-none border border-slate-300 print:border-none space-y-1.5 text-[9.5px] leading-tight">
+    <div class="print-container space-y-1.5 text-[9.5px] leading-tight" style="max-width: 215mm; width: 100%; margin: 0 auto; background: #ffffff; padding: 15mm; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); box-sizing: border-box;">
         
         <!-- HEADER KOP DISDUKCAPIL & WILAYAH -->
         <div class="flex justify-between items-start border-b-2 border-black pb-2">
@@ -539,10 +545,15 @@
                 <p>&nbsp;</p>
                 <p class="font-black">Petugas Registrasi</p>
                 
-                <div class="h-10 flex items-end justify-center">
-                    <span class="font-extrabold uppercase tracking-wide">
-                        ( .................................................. )
-                    </span>
+                <div class="h-16 flex items-end justify-center">
+                    <div class="flex flex-col items-center">
+                        <span class="font-extrabold uppercase tracking-wide underline">
+                            {{ $surat->nama_petugas ?? '( .................................................. )' }}
+                        </span>
+                        <span class="font-bold tracking-wide mt-0.5">
+                            NIP. {{ $surat->nip_petugas ?? '........................................' }}
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -571,7 +582,7 @@
     </div>
 
     <!-- TOMBOL BIRU BESAR "PRINT" DI BAGIAN BAWAH DOKUMEN (NO-PRINT) PRESISI FIGMA -->
-    <div class="no-print max-w-[210mm] mx-auto mt-6 mb-10 flex flex-col items-center space-y-4 px-4 sm:px-0">
+    <div class="no-print max-w-[215mm] w-full mx-auto mt-6 mb-10 flex flex-col items-center space-y-4 px-4 sm:px-0">
         @if(session('success'))
             <div class="w-full bg-emerald-600 text-white font-extrabold px-6 py-3.5 rounded-2xl shadow-lg text-center text-sm flex items-center justify-center space-x-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

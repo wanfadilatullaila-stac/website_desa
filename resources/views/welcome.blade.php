@@ -458,7 +458,6 @@
                             <li><strong class="text-white">Alamat:</strong> Jl. Lintas Bunut, Desa Lubuk Mandian Gajah, Kec. Bunut, Kab. Pelalawan, Riau 28382</li>
                             <li><strong class="text-white">Email:</strong> kantor.lubukmandiangajah@pelalawankab.go.id</li>
                             <li><strong class="text-white">Jam Kerja:</strong> Senin - Jumat (08:00 - 16:00 WIB)</li>
-                            <li><strong class="text-white">Nama-Nama:</strong> Created by Laila,icil,Lala,Cece,Anggi,Ijak</li>
                         </ul>
                     </div>
 
